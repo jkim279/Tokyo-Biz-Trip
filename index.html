@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도쿄 출장 일정</title>
+  <style>
+    :root {
+      --travel:  #3b82f6;
+      --shop:    #8b5cf6;
+      --dining:  #f97316;
+      --hotel:   #0d9488;
+      --meeting: #1e40af;
+      --tbd:     #9ca3af;
+      --bg:      #f8fafc;
+      --card:    #ffffff;
+      --border:  #e2e8f0;
+      --text:    #1e293b;
+      --muted:   #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #fff; padding: 36px 32px 28px; text-align: center;
+    }
+    .header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -.5px; }
+    .header p  { margin-top: 6px; color: #94a3b8; font-size: .9rem; }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      justify-content: center; padding: 16px 32px; background: #1e293b;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: .78rem; color: #cbd5e1; }
+    .legend-dot  { width: 9px; height: 9px; border-radius: 50%; }
+
+    /* ── Tab Nav ── */
+    .page-tabs {
+      background: #fff; border-bottom: 2px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .tabs-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex;
+    }
+    .tab-btn {
+      padding: 13px 22px; font-size: .88rem; font-weight: 600;
+      color: var(--muted); background: none; border: none; cursor: pointer;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      transition: color .15s, border-color .15s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
+    .tab-badge {
+      background: #f97316; color: #fff;
+      font-size: .68rem; font-weight: 700;
+      padding: 1px 7px; border-radius: 20px;
+    }
+
+    /* ── Tab Content ── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Schedule Layout ── */
+    .schedule-wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+    .schedule-layout { display: flex; gap: 28px; align-items: flex-start; }
+
+    /* ── Left Sticky Sidebar ── */
+    .tl-sidebar {
+      width: 250px; flex-shrink: 0;
+      position: sticky; top: 56px;
+      max-height: calc(100vh - 70px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .tl-sidebar::-webkit-scrollbar { width: 3px; }
+    .tl-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .tl-day-label {
+      font-size: .7rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      padding: 6px 0 10px 72px;
+    }
+    .tl-item {
+      display: flex; align-items: flex-start; cursor: pointer;
+      border-radius: 8px; padding: 5px 8px 0 2px;
+      transition: background .15s;
+    }
+    .tl-item:hover { background: #f1f5f9; }
+    .tl-item.tl-active { background: #eff6ff; }
+    .tl-item.tl-active .tl-title { color: #2563eb; }
+    .tl-item.tl-active .tl-dot  { transform: scale(1.3); }
+
+    .tl-left {
+      width: 48px; text-align: right; padding-right: 8px;
+      flex-shrink: 0; padding-top: 3px;
+    }
+    .tl-time { font-size: .68rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+
+    .tl-connector {
+      width: 18px; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .tl-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-line { flex: 1; width: 2px; background: var(--border); min-height: 22px; }
+    .tl-day-section .tl-item:last-child .tl-line { display: none; }
+
+    .tl-body { flex: 1; padding: 1px 0 14px 10px; min-width: 0; }
+    .tl-title { font-size: .82rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .tl-sub   { font-size: .68rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── Right Detail Main ── */
+    .detail-main { flex: 1; min-width: 0; }
+    .dm-day-label {
+      font-size: .72rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      padding: 4px 0 12px 0; margin-top: 4px;
+    }
+    .dm-day-label:not(:first-child) { margin-top: 20px; }
+    .detail-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+      scroll-margin-top: 72px;
+      transition: box-shadow .2s;
+    }
+    .detail-card.dc-active {
+      border-color: #bfdbfe;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.1);
+    }
+
+    .tl-day-divider { height: 1px; background: var(--border); margin: 6px 0 14px 72px; }
+
+    .dec-ref {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: .64rem; font-weight: 700;
+      background: #fef3c7; color: #b45309;
+      border: 1px solid #fde68a;
+      padding: 1px 7px; border-radius: 20px;
+      margin-top: 5px; cursor: pointer;
+      transition: background .12s;
+    }
+    .dec-ref:hover { background: #fde68a; }
+    .dec-ref::before { content: '⚑'; font-size: .7rem; }
+
+    /* (detail-col removed) */
+    .detail-panel {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: opacity .15s;
+    }
+    .detail-placeholder {
+      padding: 56px 24px; text-align: center;
+      color: var(--muted); font-size: .88rem;
+    }
+    .detail-placeholder .hint { font-size: 2rem; display: block; margin-bottom: 10px; }
+
+    /* Detail panel content */
+    .dp-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 18px; border-left: 4px solid;
+    }
+    .dp-icon  { font-size: 1.25rem; }
+    .dp-time  {
+      font-size: .76rem; font-weight: 600; padding: 2px 9px;
+      border-radius: 20px; background: rgba(0,0,0,.07); white-space: nowrap;
+    }
+    .dp-title { font-size: .95rem; font-weight: 700; }
+    .dp-body  { padding: 4px 18px 18px; }
+
+    .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .info-table td {
+      padding: 6px 8px; font-size: .84rem;
+      border-bottom: 1px solid #f1f5f9; vertical-align: top;
+    }
+    .info-table td:first-child {
+      font-weight: 600; color: var(--muted);
+      white-space: nowrap; width: 100px;
+    }
+    .info-table tr:last-child td { border-bottom: none; }
+
+    .notice {
+      background: #fff7ed; border-left: 4px solid #f97316;
+      border-radius: 0 8px 8px 0; padding: 10px 13px;
+      font-size: .8rem; margin-top: 10px; color: #92400e; line-height: 1.65;
+    }
+    .notice strong { display: block; margin-bottom: 3px; color: #c2410c; }
+    .alert-box {
+      background: #eff6ff; border-left: 4px solid #3b82f6;
+      border-radius: 0 8px 8px 0; padding: 9px 13px;
+      font-size: .8rem; margin-top: 10px; color: #1e40af;
+    }
+
+    .dp-options { display: flex; flex-direction: column; gap: 9px; margin-top: 11px; }
+    .dp-option {
+      background: #f8fafc; border: 1px solid var(--border);
+      border-radius: 8px; padding: 11px 13px;
+    }
+    .dp-opt-title {
+      font-weight: 700; font-size: .83rem; margin-bottom: 5px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .opt-badge {
+      background: var(--text); color: #fff;
+      font-size: .66rem; padding: 1px 7px; border-radius: 20px;
+    }
+    .dp-option .info-table td:first-child { width: 80px; }
+    .tbd-msg { text-align: center; color: var(--muted); padding: 22px 0 6px; font-size: .88rem; }
+
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Color helpers */
+    .c-travel  { color: var(--travel);  border-color: var(--travel) !important; }
+    .c-shop    { color: var(--shop);    border-color: var(--shop) !important; }
+    .c-dining  { color: var(--dining);  border-color: var(--dining) !important; }
+    .c-hotel   { color: var(--hotel);   border-color: var(--hotel) !important; }
+    .c-meeting { color: var(--meeting); border-color: var(--meeting) !important; }
+    .c-tbd     { color: var(--tbd);     border-color: var(--tbd) !important; }
+
+    /* ── Decisions Tab ── */
+    .decisions-wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px; }
+    .dec-heading { font-size: 1.05rem; font-weight: 700; margin-bottom: 18px; }
+    .dec-cards { display: flex; flex-direction: column; gap: 16px; }
+
+    .dec-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .dec-head {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; border-left: 4px solid #475569;
+      background: #f8fafc;
+    }
+    .dec-letter {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 700; color: #fff;
+      background: #475569; flex-shrink: 0;
+    }
+    .dec-title { font-size: .95rem; font-weight: 700; color: var(--text); }
+
+    .dec-body { padding: 16px 20px 18px; }
+    .dec-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .dec-list li {
+      font-size: .88rem; color: var(--text); line-height: 1.7;
+      padding-left: 16px; position: relative;
+    }
+    .dec-list li::before {
+      content: '–'; position: absolute; left: 0;
+      color: var(--muted); font-weight: 600;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .schedule-layout { flex-direction: column; }
+      .tl-sidebar { width: 100%; position: static; max-height: none; overflow-y: visible; }
+      .tl-left { width: 38px; }
+    }
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.5rem; }
+      .tab-btn { padding: 11px 14px; font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>✈️ 도쿄 출장 일정</h1>
+  <p>Tokyo Business Trip Plan</p>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--travel)"></div>이동</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--shop)"></div>미팅 준비</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--dining)"></div>식사</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--hotel)"></div>숙박</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--meeting)"></div>미팅</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tbd)"></div>미정</div>
+</div>
+
+<!-- Tab Nav -->
+<div class="page-tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="schedule">📋&nbsp;전체 일정</button>
+    <button class="tab-btn" data-tab="decisions">✅&nbsp;의사결정사항 <span class="tab-badge">3</span></button>
+  </div>
+</div>
+
+<!-- ════════════════ TAB: 전체 일정 ════════════════ -->
+<div id="tab-schedule" class="tab-content active">
+  <div class="schedule-wrap">
+    <div class="schedule-layout">
+
+      <!-- Left: Sticky Timeline Nav -->
+      <aside class="tl-sidebar">
+
+        <!-- DAY 1 -->
+        <div class="tl-day-section">
+          <div class="tl-day-label">DAY 1 · 일요일</div>
+
+          <div class="tl-item" data-id="t1">
+            <div class="tl-left"><span class="tl-time">06:30</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🚗 이동: 반포 → 김포공항</div><div class="tl-sub">06:30 – 07:00</div><span class="dec-ref" onclick="goToDecision('A')">의사결정 A</span></div>
+          </div>
+
+          <div class="tl-item" data-id="t2">
+            <div class="tl-left"><span class="tl-time">09:00</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">✈️ 항공편: 김포 → 하네다</div><div class="tl-sub">09:00 – 11:20 · EA3UTP</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t3">
+            <div class="tl-left"><span class="tl-time">11:20</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🚐 렌트카 탑승</div><div class="tl-sub">11:20 – 12:00 · 도요타 알파드</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t4">
+            <div class="tl-left"><span class="tl-time">12:00</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🗺️ 이동: 하네다 → 긴자</div><div class="tl-sub">12:00 – 12:30</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t5">
+            <div class="tl-left"><span class="tl-time">12:30</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--shop)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🥃 선물 구매 (리쿼샵)</div><div class="tl-sub">12:30 – 13:30 · 긴자</div><span class="dec-ref" onclick="goToDecision('B')">의사결정 B</span></div>
+          </div>
+
+          <div class="tl-item" data-id="t6">
+            <div class="tl-left"><span class="tl-time">13:30</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--dining)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🍜 점심 식사</div><div class="tl-sub">13:30 – 14:30</div><span class="dec-ref" onclick="goToDecision('B')">의사결정 B</span></div>
+          </div>
+
+          <div class="tl-item" data-id="t7">
+            <div class="tl-left"><span class="tl-time">14:30</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--hotel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🏨 호텔 체크인</div><div class="tl-sub">14:30 – 15:00</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t8">
+            <div class="tl-left"><span class="tl-time">15:00</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--tbd)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">⏳ 자유 시간 (TBD)</div><div class="tl-sub">15:00 – 18:00</div><span class="dec-ref" onclick="goToDecision('C')">의사결정 C</span></div>
+          </div>
+
+          <div class="tl-item" data-id="t9">
+            <div class="tl-left"><span class="tl-time">18:00</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🚗 이동: 저녁 식사 장소</div><div class="tl-sub">18:00 – 18:30</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t10">
+            <div class="tl-left"><span class="tl-time">18:30</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--meeting)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🤝 저녁 식사 &amp; 미팅</div><div class="tl-sub">18:30 – 02:00</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t11">
+            <div class="tl-left"><span class="tl-time">02:00</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🌙 이동: 미팅장소 → 호텔</div><div class="tl-sub">02:00 – 02:20</div></div>
+          </div>
+        </div><!-- /day1 -->
+
+        <div class="tl-day-divider"></div>
+
+        <!-- DAY 2 -->
+        <div class="tl-day-section">
+          <div class="tl-day-label">DAY 2 · 월요일</div>
+
+          <div class="tl-item" data-id="t12">
+            <div class="tl-left"><span class="tl-time">07:00</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">🌅 이동: 호텔 → 하네다공항</div><div class="tl-sub">07:00 – 07:30</div></div>
+          </div>
+
+          <div class="tl-item" data-id="t13">
+            <div class="tl-left"><span class="tl-time">09:20</span></div>
+            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+            <div class="tl-body"><div class="tl-title">✈️ 항공편: 하네다 → 김포</div><div class="tl-sub">09:20 – 11:45 · EA3UTP</div></div>
+          </div>
+        </div><!-- /day2 -->
+
+      </aside><!-- /tl-sidebar -->
+
+      <!-- Right: Detail Cards (populated by JS) -->
+      <main id="detail-main" class="detail-main"></main>
+
+    </div>
+  </div>
+</div><!-- /tab-schedule -->
+
+<!-- ════════════════ TAB: 의사결정사항 ════════════════ -->
+<div id="tab-decisions" class="tab-content">
+  <div class="decisions-wrap">
+    <div class="dec-heading">의사결정사항 (3건)</div>
+    <div class="dec-cards">
+
+      <!-- A -->
+      <div class="dec-card">
+        <div class="dec-head">
+          <div class="dec-letter">A</div>
+          <div class="dec-title">김포공항 도착 일정 (항공편 09:00 출발 기준)</div>
+        </div>
+        <div class="dec-body">
+          <ul class="dec-list">
+            <li>공항 혼잡도에 따라 <strong>최소 2시간 이전 도착</strong>이 필요할 것으로 판단됩니다.</li>
+            <li>항공편 09:00 출발 기준 <strong>07:00까지 공항 도착</strong>이 필요하며, 이에 맞춰 <strong>06:30 이전 반포 출발</strong>을 권장드립니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- B -->
+      <div class="dec-card">
+        <div class="dec-head">
+          <div class="dec-letter">B</div>
+          <div class="dec-title">공항 도착 후 긴자 방문 — 선물 구매 및 점심 식사</div>
+        </div>
+        <div class="dec-body">
+          <ul class="dec-list">
+            <li>하네다 공항 도착 후 긴자 인근에 위스키 전문 판매점이 다수 있습니다. (리쿼 마운틴, 시나노야, Jule's Whisky Collection 등)</li>
+            <li>호텔 체크인이 <strong>15:00</strong>임을 감안, 공항에서 바로 호텔로 이동하는 것보다 <strong>긴자에서 선물 구매 및 점심 식사를 하는 것</strong>이 시간 활용 면에서 효율적일 것으로 사료됩니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- C -->
+      <div class="dec-card">
+        <div class="dec-head">
+          <div class="dec-letter">C</div>
+          <div class="dec-title">호텔 체크인 이후 일정 확인 필요</div>
+        </div>
+        <div class="dec-body">
+          <ul class="dec-list">
+            <li>저녁 식사 이전 <strong>(15:00 – 18:00)</strong>까지 별도로 계획하고 계신 일정이 있으신지 확인이 필요합니다.</li>
+            <li>저녁 식사 장소 및 미팅 관련 세부 일정은 확정된 사항이 있으신지 확인이 필요합니다.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /tab-decisions -->
+
+<!-- ════════════════ Detail Templates (hidden) ════════════════ -->
+<div id="detail-templates" style="display:none">
+
+  <div id="t1-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🚗</span><span class="dp-time">06:30 – 07:00</span>
+      <span class="dp-title">이동: 반포 → 김포공항</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>소요 시간</td><td>약 26분 (네이버지도 기준)</td></tr>
+      </table>
+      <div class="notice">
+        <strong>⚠️ 공항 혼잡도 안내</strong>
+        김포공항 국제선은 <b>일요일 오전 8시 전후가 가장 혼잡</b>합니다.<br>
+        보안검색 및 출국심사 지연 가능 → <b>출발 2시간 전 공항 도착 권장</b>
+      </div>
+    </div>
+  </div>
+
+  <div id="t2-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">✈️</span><span class="dp-time">09:00 – 11:20</span>
+      <span class="dp-title">항공편: 김포 → 하네다</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>터미널</td><td>김포국제공항 터미널 1</td></tr>
+        <tr><td>비행시간</td><td>2시간 20분</td></tr>
+        <tr><td>좌석번호</td><td>01H</td></tr>
+        <tr><td>예약번호</td><td><b>EA3UTP</b></td></tr>
+        <tr><td>기종</td><td>AIRBUS A330-300</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t3-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🚐</span><span class="dp-time">11:20 – 12:00</span>
+      <span class="dp-title">렌트카 탑승</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>대행사</td><td>레드캡 투어</td></tr>
+        <tr><td>담당자</td><td>감성범 책임 &nbsp;<a href="tel:0221392802">02-2139-2802</a></td></tr>
+        <tr><td>차량</td><td>도요타 알파드</td></tr>
+        <tr><td>운행 시간</td><td>12:00 ~ 익일 02:00</td></tr>
+        <tr><td>비용</td><td>약 200만원</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t4-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🗺️</span><span class="dp-time">12:00 – 12:30</span>
+      <span class="dp-title">이동: 하네다공항 → 긴자</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>소요 시간</td><td>약 18분 (구글맵 기준, 일요일 12:30 출발)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t5-detail">
+    <div class="dp-header c-shop">
+      <span class="dp-icon">🥃</span><span class="dp-time">12:30 – 13:30</span>
+      <span class="dp-title">선물 구매 (Liquor Shop · 긴자)</span>
+    </div>
+    <div class="dp-body">
+      <div class="dp-options">
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge">옵션 1</span> 리쿼 마운틴 — 긴자 777점 &nbsp;<a href="https://maps.app.goo.gl/VHxZ22nvUy6oBjnG6" target="_blank">📍</a></div>
+          <table class="info-table">
+            <tr><td>특징</td><td>긴자 고가 위스키의 성지</td></tr>
+            <tr><td>운영 시간</td><td>일요일 AM 11:00 – PM 8:00</td></tr>
+            <tr><td>주요 후기</td><td>야마자키 25년·히비키 30년 보유 / 고숙성 위스키는 정오 직후 즉시 소진 / 히비키 21년 진열 확인됨</td></tr>
+          </table>
+        </div>
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge">옵션 2</span> 시나노야 긴자점 &nbsp;<a href="https://maps.app.goo.gl/WNyQU3zvmh5MLHPF8" target="_blank">📍</a></div>
+          <table class="info-table">
+            <tr><td>특징</td><td>'진정한 전문가의 창고'</td></tr>
+            <tr><td>운영 시간</td><td>일요일 AM 11:00 – PM 7:00</td></tr>
+            <tr><td>주요 후기</td><td>맥캘란 25년 면세 포함 약 120만원대 / 히비키 21년·이치로즈 몰트 한정판 재고 보유</td></tr>
+          </table>
+        </div>
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge">옵션 3</span> Jule's Whisky Collection — 긴자 식스 B2 &nbsp;<a href="https://maps.app.goo.gl/rsmKSFhQMJ4pYEVZ7" target="_blank">📍</a></div>
+          <table class="info-table">
+            <tr><td>운영 시간</td><td>일요일 AM 10:30 – PM 8:30</td></tr>
+            <tr><td>특징</td><td>프리미엄 위스키 편집샵 (긴자 식스 지하 2층)</td></tr>
+            <tr><td>주요 후기</td><td>독립 병입자(IB) 보틀 및 일본 로컬 증류소 프리미엄 에디션 다수 보유</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t6-detail">
+    <div class="dp-header c-dining">
+      <span class="dp-icon">🍜</span><span class="dp-time">13:30 – 14:30</span>
+      <span class="dp-title">점심 식사</span>
+    </div>
+    <div class="dp-body">
+      <div class="dp-options">
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge">옵션 1</span> 라멘 타카하시 &nbsp;<a href="https://maps.app.goo.gl/1nNnwbrQfcVjG7gA9" target="_blank">📍</a></div>
+          <table class="info-table">
+            <tr><td>대표 메뉴</td><td>야키아고 시오 라멘, 오차즈케 세트</td></tr>
+            <tr><td>비고</td><td>피크 타임 대기 긴 편</td></tr>
+          </table>
+        </div>
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge">옵션 2</span> 자쿠로 긴자점 &nbsp;<a href="https://maps.app.goo.gl/pmBgZabrqneoSwPb9" target="_blank">📍</a></div>
+          <table class="info-table">
+            <tr><td>대표 메뉴</td><td>샤브샤브, 스키야키</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t7-detail">
+    <div class="dp-header c-hotel">
+      <span class="dp-icon">🏨</span><span class="dp-time">14:30 – 15:00</span>
+      <span class="dp-title">이동 및 호텔 체크인</span>
+    </div>
+    <div class="dp-body">
+      <div class="alert-box">⏱ 이동 시간: 약 10분 (구글맵 기준)</div>
+      <div class="dp-options" style="margin-top:11px;">
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge" style="background:var(--hotel)">호텔 A</span> 오쿠라 호텔 (The Okura Tokyo)</div>
+          <table class="info-table">
+            <tr><td>예약번호</td><td><b>73391867920467</b></td></tr>
+            <tr><td>룸 타입</td><td>주니어 스위트</td></tr>
+            <tr><td>체크인/아웃</td><td>PM 3:00 / PM 12:00</td></tr>
+            <tr><td>결제</td><td>현장결제 (211,255엔)</td></tr>
+          </table>
+        </div>
+        <div class="dp-option">
+          <div class="dp-opt-title"><span class="opt-badge" style="background:var(--hotel)">호텔 B</span> 빌라 퐁텐 그랜드 도쿄 — 롯폰기</div>
+          <table class="info-table">
+            <tr><td>예약번호</td><td><b>73391872195453</b></td></tr>
+            <tr><td>체크인</td><td>PM 3:00</td></tr>
+            <tr><td>결제</td><td>현장결제 (60,257엔)</td></tr>
+            <tr><td>비고</td><td>오쿠라 호텔까지 도보 10분 / 차 4분</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t8-detail">
+    <div class="dp-header c-tbd">
+      <span class="dp-icon">⏳</span><span class="dp-time">15:00 – 18:00</span>
+      <span class="dp-title">자유 시간 (일정 미정)</span>
+    </div>
+    <div class="dp-body">
+      <p class="tbd-msg">세부 일정이 아직 확정되지 않았습니다.</p>
+    </div>
+  </div>
+
+  <div id="t9-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🚗</span><span class="dp-time">18:00 – 18:30</span>
+      <span class="dp-title">이동: 저녁 식사 장소</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>식당</td><td>미정 (TBD)</td></tr>
+        <tr><td>미팅 장소</td><td>3-chōme-3-9 Aobadai, Meguro City, Tokyo 153-0042</td></tr>
+        <tr><td>소요 시간</td><td>약 10 – 20분 (구글맵 기준, 18:00 출발)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t10-detail">
+    <div class="dp-header c-meeting">
+      <span class="dp-icon">🤝</span><span class="dp-time">18:30 – 02:00</span>
+      <span class="dp-title">저녁 식사 &amp; 미팅</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>장소</td><td>Aobadai, Meguro City, Tokyo</td></tr>
+        <tr><td>세부 내용</td><td>미정 (TBD)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t11-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🌙</span><span class="dp-time">02:00 – 02:20</span>
+      <span class="dp-title">이동: 미팅장소 → 호텔</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>소요 시간</td><td>약 18분 (구글맵 기준)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t12-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🌅</span><span class="dp-time">07:00 – 07:30</span>
+      <span class="dp-title">이동: 호텔 → 하네다공항</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>소요 시간</td><td>약 25분 (구글맵 기준)</td></tr>
+      </table>
+      <div class="notice">
+        <strong>⚠️ 하네다공항 혼잡도 안내 (공식 공지)</strong>
+        월요일 아침은 출장객·귀국 여행객이 겹쳐 <b>평소의 2배 이상 혼잡</b>합니다.<br><br>
+        특히 혼잡 예상 시간대<br>
+        · 오전 07:00 – 11:00 &nbsp;· 오후 01:00 – 04:00 &nbsp;· 오후 07:00 – 09:00<br><br>
+        제3 터미널 보안검사 대기 장시간 발생 가능. <b>충분한 여유를 두고 공항에 도착</b>하세요.
+      </div>
+    </div>
+  </div>
+
+  <div id="t13-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">✈️</span><span class="dp-time">09:20 – 11:45</span>
+      <span class="dp-title">항공편: 하네다 → 김포</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>터미널</td><td>하네다공항 터미널 3</td></tr>
+        <tr><td>비행시간</td><td>2시간 25분</td></tr>
+        <tr><td>좌석번호</td><td>07A</td></tr>
+        <tr><td>예약번호</td><td><b>EA3UTP</b></td></tr>
+        <tr><td>기종</td><td>BOEING 737 MAX 8</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /detail-templates -->
+
+<div style="text-align:center; padding:28px; color:#94a3b8; font-size:.78rem;">
+  도쿄 출장 일정표
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── Populate right-side detail cards from templates ──
+  const dayDef = [
+    { label: 'DAY 1 · 일요일', ids: ['t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t11'] },
+    { label: 'DAY 2 · 월요일', ids: ['t12','t13'] }
+  ];
+  const detailMain = document.getElementById('detail-main');
+  dayDef.forEach(day => {
+    const h = document.createElement('div');
+    h.className = 'dm-day-label';
+    h.textContent = day.label;
+    detailMain.appendChild(h);
+    day.ids.forEach(id => {
+      const tpl = document.getElementById(id + '-detail');
+      if (!tpl) return;
+      const card = document.createElement('div');
+      card.className = 'detail-card';
+      card.id = 'dc-' + id;
+      card.innerHTML = tpl.innerHTML;
+      detailMain.appendChild(card);
+    });
+  });
+
+  // ── Left nav: click scrolls to right card ──
+  const navItems = document.querySelectorAll('.tl-item');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const card = document.getElementById('dc-' + item.dataset.id);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ── Scroll spy: highlight nav item matching visible card ──
+  function setActive(id) {
+    navItems.forEach(nav => {
+      nav.classList.toggle('tl-active', nav.dataset.id === id);
+    });
+    document.querySelectorAll('.detail-card').forEach(c => {
+      c.classList.toggle('dc-active', c.id === 'dc-' + id);
+    });
+    // Scroll sidebar to keep active nav item visible
+    const activeNav = document.querySelector(`.tl-item[data-id="${id}"]`);
+    if (activeNav) activeNav.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) setActive(entry.target.id.replace('dc-', ''));
+    });
+  }, { rootMargin: '-56px 0px -60% 0px', threshold: 0 });
+
+  document.querySelectorAll('.detail-card').forEach(card => observer.observe(card));
+
+  // Activate first item on load
+  setActive('t1');
+
+  // Jump to decision tab and highlight card
+  function goToDecision(letter) {
+    // Switch to decisions tab
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelector('[data-tab="decisions"]').classList.add('active');
+    document.getElementById('tab-decisions').classList.add('active');
+
+    // Highlight the target card briefly
+    const cards = document.querySelectorAll('.dec-card');
+    const letters = ['A','B','C'];
+    const idx = letters.indexOf(letter);
+    if (idx < 0) return;
+    const card = cards[idx];
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.style.transition = 'box-shadow .2s';
+    card.style.boxShadow = '0 0 0 3px #fbbf24';
+    setTimeout(() => { card.style.boxShadow = ''; }, 1800);
+  }
+</script>
+</body>
+</html>
