@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function() {
+      const pw = sessionStorage.getItem("auth");
+      if (pw !== "dunamu0403") {
+        const input = prompt("비밀번호를 입력하세요");
+        if (input !== "dunamu0403") {
+          document.documentElement.innerHTML = "<h2 style='text-align:center;margin-top:40vh;font-family:sans-serif'>접근 권한이 없습니다.</h2>";
+        } else {
+          sessionStorage.setItem("auth", input);
+        }
+      }
+    })();
+  </script>
   <title>도쿄 출장 일정</title>
   <style>
     :root {
