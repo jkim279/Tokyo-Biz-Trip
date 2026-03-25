@@ -40,195 +40,190 @@
     /* ── Header ── */
     .header {
       background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      color: #fff; padding: 36px 32px 28px; text-align: center;
+      color: #fff; padding: 28px 20px 20px; text-align: center;
     }
-    .header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -.5px; }
-    .header p  { margin-top: 6px; color: #94a3b8; font-size: .9rem; }
+    .header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -.5px; }
+    .header p  { margin-top: 4px; color: #94a3b8; font-size: .85rem; }
 
     /* ── Legend ── */
     .legend {
-      display: flex; flex-wrap: wrap; gap: 12px;
-      justify-content: center; padding: 16px 32px; background: #1e293b;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; padding: 12px 16px; background: #1e293b;
     }
-    .legend-item { display: flex; align-items: center; gap: 6px; font-size: .78rem; color: #cbd5e1; }
-    .legend-dot  { width: 9px; height: 9px; border-radius: 50%; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: .75rem; color: #cbd5e1; }
+    .legend-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
     /* ── Tab Nav ── */
     .page-tabs {
       background: #fff; border-bottom: 2px solid var(--border);
       position: sticky; top: 0; z-index: 100;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    .page-tabs::-webkit-scrollbar { display: none; }
     .tabs-inner {
-      max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex;
+      display: flex; white-space: nowrap; min-width: max-content;
+      padding: 0 4px;
     }
     .tab-btn {
-      padding: 13px 22px; font-size: .88rem; font-weight: 600;
+      padding: 13px 18px; font-size: .85rem; font-weight: 600;
       color: var(--muted); background: none; border: none; cursor: pointer;
       border-bottom: 3px solid transparent; margin-bottom: -2px;
       transition: color .15s, border-color .15s;
-      display: flex; align-items: center; gap: 7px;
+      display: inline-flex; align-items: center; gap: 6px;
+      white-space: nowrap;
     }
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
     .tab-badge {
       background: #f97316; color: #fff;
-      font-size: .68rem; font-weight: 700;
-      padding: 1px 7px; border-radius: 20px;
+      font-size: .65rem; font-weight: 700;
+      padding: 1px 6px; border-radius: 20px;
     }
 
     /* ── Tab Content ── */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* ── Schedule Layout ── */
-    .schedule-wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
-    .schedule-layout { display: flex; gap: 28px; align-items: flex-start; }
-
-    /* ── Left Sticky Sidebar ── */
-    .tl-sidebar {
-      width: 250px; flex-shrink: 0;
-      position: sticky; top: 56px;
-      max-height: calc(100vh - 70px);
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-    .tl-sidebar::-webkit-scrollbar { width: 3px; }
-    .tl-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    /* ════════════════════════════════════
+       전체 일정 탭 - 모바일 타임라인
+    ════════════════════════════════════ */
+    .schedule-wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px; }
 
     .tl-day-label {
-      font-size: .7rem; font-weight: 700; color: var(--muted);
+      font-size: .72rem; font-weight: 700; color: var(--muted);
       text-transform: uppercase; letter-spacing: .5px;
-      padding: 6px 0 10px 72px;
+      padding: 4px 0 10px 54px; margin-top: 4px;
     }
+    .tl-day-divider { height: 1px; background: var(--border); margin: 8px 0 16px 54px; }
+
     .tl-item {
-      display: flex; align-items: flex-start; cursor: pointer;
-      border-radius: 8px; padding: 5px 8px 0 2px;
-      transition: background .15s;
+      display: flex; align-items: flex-start;
+      border-radius: 10px; padding: 6px 10px 0 2px;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      transition: background .12s;
+      text-decoration: none; color: inherit;
     }
-    .tl-item:hover { background: #f1f5f9; }
-    .tl-item.tl-active { background: #eff6ff; }
-    .tl-item.tl-active .tl-title { color: #2563eb; }
-    .tl-item.tl-active .tl-dot  { transform: scale(1.3); }
+    .tl-item:active, .tl-item:hover { background: #eff6ff; }
 
     .tl-left {
-      width: 48px; text-align: right; padding-right: 8px;
-      flex-shrink: 0; padding-top: 3px;
+      width: 42px; text-align: right; padding-right: 8px;
+      flex-shrink: 0; padding-top: 4px;
     }
     .tl-time { font-size: .68rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
 
     .tl-connector {
-      width: 18px; flex-shrink: 0;
+      width: 16px; flex-shrink: 0;
       display: flex; flex-direction: column; align-items: center;
     }
     .tl-dot {
-      width: 10px; height: 10px; border-radius: 50%;
+      width: 11px; height: 11px; border-radius: 50%;
       margin-top: 5px; flex-shrink: 0;
     }
-    .tl-line { flex: 1; width: 2px; background: var(--border); min-height: 22px; }
+    .tl-line { flex: 1; width: 2px; background: var(--border); min-height: 24px; }
     .tl-day-section .tl-item:last-child .tl-line { display: none; }
 
-    .tl-body { flex: 1; padding: 1px 0 14px 10px; min-width: 0; }
-    .tl-title { font-size: .82rem; font-weight: 600; color: var(--text); line-height: 1.4; }
-    .tl-sub   { font-size: .68rem; color: var(--muted); margin-top: 2px; }
-
-    /* ── Right Detail Main ── */
-    .detail-main { flex: 1; min-width: 0; }
-    .dm-day-label {
-      font-size: .72rem; font-weight: 700; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .5px;
-      padding: 4px 0 12px 0; margin-top: 4px;
+    .tl-body { flex: 1; padding: 2px 0 16px 10px; min-width: 0; }
+    .tl-title {
+      font-size: .88rem; font-weight: 600; color: var(--text); line-height: 1.4;
     }
-    .dm-day-label:not(:first-child) { margin-top: 20px; }
-    .detail-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden; margin-bottom: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.04);
-      scroll-margin-top: 72px;
-      transition: box-shadow .2s;
+    .tl-sub   { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+    .tl-arrow {
+      color: #94a3b8; font-size: .8rem; margin-left: 4px;
+      flex-shrink: 0; align-self: center; padding-top: 2px;
     }
-    .detail-card.dc-active {
-      border-color: #bfdbfe;
-      box-shadow: 0 0 0 3px rgba(59,130,246,.1);
-    }
-
-    .tl-day-divider { height: 1px; background: var(--border); margin: 6px 0 14px 72px; }
 
     .dec-ref {
-      display: inline-flex; align-items: center; gap: 4px;
+      display: inline-flex; align-items: center; gap: 3px;
       font-size: .64rem; font-weight: 700;
       background: #fef3c7; color: #b45309;
       border: 1px solid #fde68a;
       padding: 1px 7px; border-radius: 20px;
       margin-top: 5px; cursor: pointer;
-      transition: background .12s;
     }
-    .dec-ref:hover { background: #fde68a; }
-    .dec-ref::before { content: '⚑'; font-size: .7rem; }
+    .dec-ref::before { content: '⚑'; font-size: .68rem; }
 
-    /* (detail-col removed) */
-    .detail-panel {
+    /* ════════════════════════════════════
+       상세 일정 탭
+    ════════════════════════════════════ */
+    .detail-wrap { max-width: 640px; margin: 0 auto; padding: 16px 16px 32px; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .82rem; font-weight: 600; color: #2563eb;
+      background: none; border: none; cursor: pointer;
+      padding: 10px 4px 14px; margin-bottom: 4px;
+    }
+
+    .dm-day-label {
+      font-size: .72rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      padding: 4px 0 10px 0; margin-top: 8px;
+    }
+    .dm-day-label:first-child { margin-top: 0; }
+
+    .detail-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      transition: opacity .15s;
+      border-radius: 14px; overflow: hidden; margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+      scroll-margin-top: 72px;
     }
-    .detail-placeholder {
-      padding: 56px 24px; text-align: center;
-      color: var(--muted); font-size: .88rem;
+    .detail-card.dc-highlight {
+      border-color: #bfdbfe;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
     }
-    .detail-placeholder .hint { font-size: 2rem; display: block; margin-bottom: 10px; }
 
-    /* Detail panel content */
     .dp-header {
       display: flex; align-items: center; gap: 10px;
-      padding: 14px 18px; border-left: 4px solid;
+      padding: 13px 16px; border-left: 4px solid;
     }
-    .dp-icon  { font-size: 1.25rem; }
+    .dp-icon  { font-size: 1.2rem; flex-shrink: 0; }
     .dp-time  {
-      font-size: .76rem; font-weight: 600; padding: 2px 9px;
-      border-radius: 20px; background: rgba(0,0,0,.07); white-space: nowrap;
+      font-size: .72rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 20px; background: rgba(0,0,0,.07); white-space: nowrap; flex-shrink: 0;
     }
-    .dp-title { font-size: .95rem; font-weight: 700; }
-    .dp-body  { padding: 4px 18px 18px; }
+    .dp-title { font-size: .9rem; font-weight: 700; line-height: 1.3; }
+    .dp-body  { padding: 4px 16px 16px; }
 
     .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     .info-table td {
-      padding: 6px 8px; font-size: .84rem;
+      padding: 7px 6px; font-size: .82rem;
       border-bottom: 1px solid #f1f5f9; vertical-align: top;
     }
     .info-table td:first-child {
       font-weight: 600; color: var(--muted);
-      white-space: nowrap; width: 100px;
+      white-space: nowrap; width: 88px;
     }
     .info-table tr:last-child td { border-bottom: none; }
 
     .notice {
       background: #fff7ed; border-left: 4px solid #f97316;
-      border-radius: 0 8px 8px 0; padding: 10px 13px;
-      font-size: .8rem; margin-top: 10px; color: #92400e; line-height: 1.65;
+      border-radius: 0 8px 8px 0; padding: 10px 12px;
+      font-size: .78rem; margin-top: 10px; color: #92400e; line-height: 1.65;
     }
     .notice strong { display: block; margin-bottom: 3px; color: #c2410c; }
     .alert-box {
       background: #eff6ff; border-left: 4px solid #3b82f6;
-      border-radius: 0 8px 8px 0; padding: 9px 13px;
-      font-size: .8rem; margin-top: 10px; color: #1e40af;
+      border-radius: 0 8px 8px 0; padding: 9px 12px;
+      font-size: .78rem; margin-top: 10px; color: #1e40af;
     }
 
     .dp-options { display: flex; flex-direction: column; gap: 9px; margin-top: 11px; }
     .dp-option {
       background: #f8fafc; border: 1px solid var(--border);
-      border-radius: 8px; padding: 11px 13px;
+      border-radius: 8px; padding: 11px 12px;
     }
     .dp-opt-title {
-      font-weight: 700; font-size: .83rem; margin-bottom: 5px;
-      display: flex; align-items: center; gap: 7px;
+      font-weight: 700; font-size: .82rem; margin-bottom: 5px;
+      display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
     }
     .opt-badge {
       background: var(--text); color: #fff;
-      font-size: .66rem; padding: 1px 7px; border-radius: 20px;
+      font-size: .64rem; padding: 1px 7px; border-radius: 20px;
+      white-space: nowrap;
     }
-    .dp-option .info-table td:first-child { width: 80px; }
-    .tbd-msg { text-align: center; color: var(--muted); padding: 22px 0 6px; font-size: .88rem; }
+    .dp-option .info-table td:first-child { width: 76px; }
+    .tbd-msg { text-align: center; color: var(--muted); padding: 22px 0 6px; font-size: .86rem; }
 
     a { color: #2563eb; text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -241,10 +236,10 @@
     .c-meeting { color: var(--meeting); border-color: var(--meeting) !important; }
     .c-tbd     { color: var(--tbd);     border-color: var(--tbd) !important; }
 
-    /* ── Decisions Tab ── */
-    .decisions-wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px; }
-    .dec-heading { font-size: 1.05rem; font-weight: 700; margin-bottom: 18px; }
-    .dec-cards { display: flex; flex-direction: column; gap: 16px; }
+    /* ── 의사결정 탭 ── */
+    .decisions-wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 32px; }
+    .dec-heading { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .dec-cards { display: flex; flex-direction: column; gap: 14px; }
 
     .dec-card {
       background: var(--card); border: 1px solid var(--border);
@@ -253,41 +248,31 @@
     }
     .dec-head {
       display: flex; align-items: center; gap: 12px;
-      padding: 14px 20px; border-left: 4px solid #475569;
+      padding: 13px 16px; border-left: 4px solid #475569;
       background: #f8fafc;
     }
     .dec-letter {
-      width: 28px; height: 28px; border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: .8rem; font-weight: 700; color: #fff;
+      font-size: .78rem; font-weight: 700; color: #fff;
       background: #475569; flex-shrink: 0;
     }
-    .dec-title { font-size: .95rem; font-weight: 700; color: var(--text); }
-
-    .dec-body { padding: 16px 20px 18px; }
+    .dec-title { font-size: .9rem; font-weight: 700; color: var(--text); }
+    .dec-body { padding: 14px 16px 16px; }
     .dec-list {
-      list-style: none;
-      display: flex; flex-direction: column; gap: 10px;
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
     }
     .dec-list li {
-      font-size: .88rem; color: var(--text); line-height: 1.7;
-      padding-left: 16px; position: relative;
+      font-size: .85rem; color: var(--text); line-height: 1.7;
+      padding-left: 14px; position: relative;
     }
     .dec-list li::before {
       content: '–'; position: absolute; left: 0;
       color: var(--muted); font-weight: 600;
     }
 
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .schedule-layout { flex-direction: column; }
-      .tl-sidebar { width: 100%; position: static; max-height: none; overflow-y: visible; }
-      .tl-left { width: 38px; }
-    }
-    @media (max-width: 600px) {
-      .header h1 { font-size: 1.5rem; }
-      .tab-btn { padding: 11px 14px; font-size: .8rem; }
-    }
+    /* ── Footer ── */
+    .footer { text-align:center; padding:24px; color:#94a3b8; font-size:.75rem; }
   </style>
 </head>
 <body>
@@ -312,116 +297,171 @@
 <div class="page-tabs">
   <div class="tabs-inner">
     <button class="tab-btn active" data-tab="schedule">📋&nbsp;전체 일정</button>
-    <button class="tab-btn" data-tab="decisions">✅&nbsp;의사결정사항 <span class="tab-badge">3</span></button>
+    <button class="tab-btn" data-tab="detail">🔍&nbsp;상세 일정</button>
+    <button class="tab-btn" data-tab="decisions">✅&nbsp;의사결정 <span class="tab-badge">3</span></button>
   </div>
 </div>
 
 <!-- ════════════════ TAB: 전체 일정 ════════════════ -->
 <div id="tab-schedule" class="tab-content active">
   <div class="schedule-wrap">
-    <div class="schedule-layout">
 
-      <!-- Left: Sticky Timeline Nav -->
-      <aside class="tl-sidebar">
+    <!-- DAY 1 -->
+    <div class="tl-day-section">
+      <div class="tl-day-label">DAY 1 · 일요일</div>
 
-        <!-- DAY 1 -->
-        <div class="tl-day-section">
-          <div class="tl-day-label">DAY 1 · 일요일</div>
+      <div class="tl-item" data-id="t1" onclick="goToDetail('t1')">
+        <div class="tl-left"><span class="tl-time">06:30</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🚗 이동: 반포 → 김포공항</div>
+          <div class="tl-sub">06:30 – 07:00</div>
+          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('A')">의사결정 A</span>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t1">
-            <div class="tl-left"><span class="tl-time">06:30</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🚗 이동: 반포 → 김포공항</div><div class="tl-sub">06:30 – 07:00</div><span class="dec-ref" onclick="goToDecision('A')">의사결정 A</span></div>
-          </div>
+      <div class="tl-item" data-id="t2" onclick="goToDetail('t2')">
+        <div class="tl-left"><span class="tl-time">09:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">✈️ 항공편: 김포 → 하네다</div>
+          <div class="tl-sub">09:00 – 11:20 · EA3UTP</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t2">
-            <div class="tl-left"><span class="tl-time">09:00</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">✈️ 항공편: 김포 → 하네다</div><div class="tl-sub">09:00 – 11:20 · EA3UTP</div></div>
-          </div>
+      <div class="tl-item" data-id="t3" onclick="goToDetail('t3')">
+        <div class="tl-left"><span class="tl-time">11:20</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🚐 렌트카 탑승</div>
+          <div class="tl-sub">11:20 – 12:00 · 도요타 알파드</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t3">
-            <div class="tl-left"><span class="tl-time">11:20</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🚐 렌트카 탑승</div><div class="tl-sub">11:20 – 12:00 · 도요타 알파드</div></div>
-          </div>
+      <div class="tl-item" data-id="t4" onclick="goToDetail('t4')">
+        <div class="tl-left"><span class="tl-time">12:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🗺️ 이동: 하네다 → 긴자</div>
+          <div class="tl-sub">12:00 – 12:30</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t4">
-            <div class="tl-left"><span class="tl-time">12:00</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🗺️ 이동: 하네다 → 긴자</div><div class="tl-sub">12:00 – 12:30</div></div>
-          </div>
+      <div class="tl-item" data-id="t5" onclick="goToDetail('t5')">
+        <div class="tl-left"><span class="tl-time">12:30</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--shop)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🥃 선물 구매 (리쿼샵)</div>
+          <div class="tl-sub">12:30 – 13:30 · 긴자</div>
+          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('B')">의사결정 B</span>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t5">
-            <div class="tl-left"><span class="tl-time">12:30</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--shop)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🥃 선물 구매 (리쿼샵)</div><div class="tl-sub">12:30 – 13:30 · 긴자</div><span class="dec-ref" onclick="goToDecision('B')">의사결정 B</span></div>
-          </div>
+      <div class="tl-item" data-id="t6" onclick="goToDetail('t6')">
+        <div class="tl-left"><span class="tl-time">13:30</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--dining)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🍜 점심 식사</div>
+          <div class="tl-sub">13:30 – 14:30</div>
+          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('B')">의사결정 B</span>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t6">
-            <div class="tl-left"><span class="tl-time">13:30</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--dining)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🍜 점심 식사</div><div class="tl-sub">13:30 – 14:30</div><span class="dec-ref" onclick="goToDecision('B')">의사결정 B</span></div>
-          </div>
+      <div class="tl-item" data-id="t7" onclick="goToDetail('t7')">
+        <div class="tl-left"><span class="tl-time">14:30</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--hotel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🏨 호텔 체크인</div>
+          <div class="tl-sub">14:30 – 15:00</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t7">
-            <div class="tl-left"><span class="tl-time">14:30</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--hotel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🏨 호텔 체크인</div><div class="tl-sub">14:30 – 15:00</div></div>
-          </div>
+      <div class="tl-item" data-id="t8" onclick="goToDetail('t8')">
+        <div class="tl-left"><span class="tl-time">15:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--tbd)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">⏳ 자유 시간 (TBD)</div>
+          <div class="tl-sub">15:00 – 18:00</div>
+          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('C')">의사결정 C</span>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t8">
-            <div class="tl-left"><span class="tl-time">15:00</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--tbd)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">⏳ 자유 시간 (TBD)</div><div class="tl-sub">15:00 – 18:00</div><span class="dec-ref" onclick="goToDecision('C')">의사결정 C</span></div>
-          </div>
+      <div class="tl-item" data-id="t9" onclick="goToDetail('t9')">
+        <div class="tl-left"><span class="tl-time">18:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🚗 이동: 저녁 식사 장소</div>
+          <div class="tl-sub">18:00 – 18:30</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t9">
-            <div class="tl-left"><span class="tl-time">18:00</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🚗 이동: 저녁 식사 장소</div><div class="tl-sub">18:00 – 18:30</div></div>
-          </div>
+      <div class="tl-item" data-id="t10" onclick="goToDetail('t10')">
+        <div class="tl-left"><span class="tl-time">18:30</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--meeting)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🤝 저녁 식사 &amp; 미팅</div>
+          <div class="tl-sub">18:30 – 02:00</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
 
-          <div class="tl-item" data-id="t10">
-            <div class="tl-left"><span class="tl-time">18:30</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--meeting)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🤝 저녁 식사 &amp; 미팅</div><div class="tl-sub">18:30 – 02:00</div></div>
-          </div>
-
-          <div class="tl-item" data-id="t11">
-            <div class="tl-left"><span class="tl-time">02:00</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🌙 이동: 미팅장소 → 호텔</div><div class="tl-sub">02:00 – 02:20</div></div>
-          </div>
-        </div><!-- /day1 -->
-
-        <div class="tl-day-divider"></div>
-
-        <!-- DAY 2 -->
-        <div class="tl-day-section">
-          <div class="tl-day-label">DAY 2 · 월요일</div>
-
-          <div class="tl-item" data-id="t12">
-            <div class="tl-left"><span class="tl-time">07:00</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">🌅 이동: 호텔 → 하네다공항</div><div class="tl-sub">07:00 – 07:30</div></div>
-          </div>
-
-          <div class="tl-item" data-id="t13">
-            <div class="tl-left"><span class="tl-time">09:20</span></div>
-            <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
-            <div class="tl-body"><div class="tl-title">✈️ 항공편: 하네다 → 김포</div><div class="tl-sub">09:20 – 11:45 · EA3UTP</div></div>
-          </div>
-        </div><!-- /day2 -->
-
-      </aside><!-- /tl-sidebar -->
-
-      <!-- Right: Detail Cards (populated by JS) -->
-      <main id="detail-main" class="detail-main"></main>
-
+      <div class="tl-item" data-id="t11" onclick="goToDetail('t11')">
+        <div class="tl-left"><span class="tl-time">02:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🌙 이동: 미팅장소 → 호텔</div>
+          <div class="tl-sub">02:00 – 02:20</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
     </div>
+
+    <div class="tl-day-divider"></div>
+
+    <!-- DAY 2 -->
+    <div class="tl-day-section">
+      <div class="tl-day-label">DAY 2 · 월요일</div>
+
+      <div class="tl-item" data-id="t12" onclick="goToDetail('t12')">
+        <div class="tl-left"><span class="tl-time">07:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🌅 이동: 호텔 → 하네다공항</div>
+          <div class="tl-sub">07:00 – 07:30</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+
+      <div class="tl-item" data-id="t13" onclick="goToDetail('t13')">
+        <div class="tl-left"><span class="tl-time">09:20</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">✈️ 항공편: 하네다 → 김포</div>
+          <div class="tl-sub">09:20 – 11:45 · EA3UTP</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+    </div>
+
   </div>
 </div><!-- /tab-schedule -->
+
+<!-- ════════════════ TAB: 상세 일정 ════════════════ -->
+<div id="tab-detail" class="tab-content">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="switchTab('schedule')">‹ 전체 일정으로</button>
+    <div id="detail-main"></div>
+  </div>
+</div><!-- /tab-detail -->
 
 <!-- ════════════════ TAB: 의사결정사항 ════════════════ -->
 <div id="tab-decisions" class="tab-content">
@@ -429,8 +469,7 @@
     <div class="dec-heading">의사결정사항 (3건)</div>
     <div class="dec-cards">
 
-      <!-- A -->
-      <div class="dec-card">
+      <div class="dec-card" id="dec-A">
         <div class="dec-head">
           <div class="dec-letter">A</div>
           <div class="dec-title">김포공항 도착 일정 (항공편 09:00 출발 기준)</div>
@@ -443,8 +482,7 @@
         </div>
       </div>
 
-      <!-- B -->
-      <div class="dec-card">
+      <div class="dec-card" id="dec-B">
         <div class="dec-head">
           <div class="dec-letter">B</div>
           <div class="dec-title">공항 도착 후 긴자 방문 — 선물 구매 및 점심 식사</div>
@@ -457,8 +495,7 @@
         </div>
       </div>
 
-      <!-- C -->
-      <div class="dec-card">
+      <div class="dec-card" id="dec-C">
         <div class="dec-head">
           <div class="dec-letter">C</div>
           <div class="dec-title">호텔 체크인 이후 일정 확인 필요</div>
@@ -714,22 +751,10 @@
 
 </div><!-- /detail-templates -->
 
-<div style="text-align:center; padding:28px; color:#94a3b8; font-size:.78rem;">
-  도쿄 출장 일정표
-</div>
+<div class="footer">도쿄 출장 일정표</div>
 
 <script>
-  // Tab switching
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  // ── Populate right-side detail cards from templates ──
+  // ── Build detail cards ──
   const dayDef = [
     { label: 'DAY 1 · 일요일', ids: ['t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t11'] },
     { label: 'DAY 2 · 월요일', ids: ['t12','t13'] }
@@ -751,57 +776,42 @@
     });
   });
 
-  // ── Left nav: click scrolls to right card ──
-  const navItems = document.querySelectorAll('.tl-item');
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const card = document.getElementById('dc-' + item.dataset.id);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // ── Tab switching ──
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === tabName);
     });
-  });
-
-  // ── Scroll spy: highlight nav item matching visible card ──
-  function setActive(id) {
-    navItems.forEach(nav => {
-      nav.classList.toggle('tl-active', nav.dataset.id === id);
-    });
-    document.querySelectorAll('.detail-card').forEach(c => {
-      c.classList.toggle('dc-active', c.id === 'dc-' + id);
-    });
-    // Scroll sidebar to keep active nav item visible
-    const activeNav = document.querySelector(`.tl-item[data-id="${id}"]`);
-    if (activeNav) activeNav.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tabName).classList.add('active');
   }
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) setActive(entry.target.id.replace('dc-', ''));
-    });
-  }, { rootMargin: '-56px 0px -60% 0px', threshold: 0 });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
 
-  document.querySelectorAll('.detail-card').forEach(card => observer.observe(card));
+  // ── Click timeline item → go to detail tab + scroll ──
+  function goToDetail(id) {
+    switchTab('detail');
+    setTimeout(() => {
+      const card = document.getElementById('dc-' + id);
+      if (!card) return;
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      card.classList.add('dc-highlight');
+      setTimeout(() => card.classList.remove('dc-highlight'), 1800);
+    }, 60);
+  }
 
-  // Activate first item on load
-  setActive('t1');
-
-  // Jump to decision tab and highlight card
+  // ── Jump to decision tab ──
   function goToDecision(letter) {
-    // Switch to decisions tab
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelector('[data-tab="decisions"]').classList.add('active');
-    document.getElementById('tab-decisions').classList.add('active');
-
-    // Highlight the target card briefly
-    const cards = document.querySelectorAll('.dec-card');
-    const letters = ['A','B','C'];
-    const idx = letters.indexOf(letter);
-    if (idx < 0) return;
-    const card = cards[idx];
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    card.style.transition = 'box-shadow .2s';
-    card.style.boxShadow = '0 0 0 3px #fbbf24';
-    setTimeout(() => { card.style.boxShadow = ''; }, 1800);
+    switchTab('decisions');
+    setTimeout(() => {
+      const card = document.getElementById('dec-' + letter);
+      if (!card) return;
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.style.transition = 'box-shadow .2s';
+      card.style.boxShadow = '0 0 0 3px #fbbf24';
+      setTimeout(() => { card.style.boxShadow = ''; }, 1800);
+    }, 60);
   }
 </script>
 </body>
