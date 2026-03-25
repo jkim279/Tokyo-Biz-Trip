@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const ID = "jason";
-const PW = "tokyo2025";
+const PW = "dunamu0403";
 
 export function middleware(req) {
   const auth = req.headers.get("authorization");
