@@ -316,7 +316,7 @@
   <div class="tabs-inner">
     <button class="tab-btn active" data-tab="schedule">📋&nbsp;전체 일정</button>
     <button class="tab-btn" data-tab="detail">🔍&nbsp;상세 일정</button>
-    <button class="tab-btn" data-tab="decisions">✅&nbsp;의사결정 <span class="tab-badge">3</span></button>
+    <button class="tab-btn" data-tab="decisions">✅&nbsp;의사결정 <span class="tab-badge">2</span></button>
   </div>
 </div>
 
@@ -329,12 +329,11 @@
       <div class="tl-day-label">DAY 1 · 일요일</div>
 
       <div class="tl-item" data-id="t1" onclick="goToDetail('t1')">
-        <div class="tl-left"><span class="tl-time">06:30</span></div>
+        <div class="tl-left"><span class="tl-time">07:00</span></div>
         <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
         <div class="tl-body">
           <div class="tl-title">🚗 이동: 반포 → 김포공항</div>
-          <div class="tl-sub">06:30 – 07:00</div>
-          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('A')">의사결정 A</span>
+          <div class="tl-sub">07:00 – 07:30</div>
         </div>
         <div class="tl-arrow">›</div>
       </div>
@@ -427,7 +426,17 @@
         <div class="tl-connector"><div class="tl-dot" style="background:var(--meeting)"></div><div class="tl-line"></div></div>
         <div class="tl-body">
           <div class="tl-title">🤝 저녁 식사 &amp; 미팅</div>
-          <div class="tl-sub">18:30 – 02:00</div>
+          <div class="tl-sub">18:30 – 20:00</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+
+      <div class="tl-item" data-id="t14" onclick="goToDetail('t14')">
+        <div class="tl-left"><span class="tl-time">20:00</span></div>
+        <div class="tl-connector"><div class="tl-dot" style="background:var(--travel)"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">🚗 이동: 미팅장소</div>
+          <div class="tl-sub">20:00 – 20:30</div>
         </div>
         <div class="tl-arrow">›</div>
       </div>
@@ -484,21 +493,8 @@
 <!-- ════════════════ TAB: 의사결정사항 ════════════════ -->
 <div id="tab-decisions" class="tab-content">
   <div class="decisions-wrap">
-    <div class="dec-heading">의사결정사항 (3건)</div>
+    <div class="dec-heading">의사결정사항 (2건)</div>
     <div class="dec-cards">
-
-      <div class="dec-card" id="dec-A">
-        <div class="dec-head">
-          <div class="dec-letter">A</div>
-          <div class="dec-title">김포공항 도착 일정 (항공편 09:00 출발 기준)</div>
-        </div>
-        <div class="dec-body">
-          <ul class="dec-list">
-            <li>공항 혼잡도에 따라 <strong>최소 2시간 이전 도착</strong>이 필요할 것으로 판단됩니다.</li>
-            <li>항공편 09:00 출발 기준 <strong>07:00까지 공항 도착</strong>이 필요하며, 이에 맞춰 <strong>06:30 이전 반포 출발</strong>을 권장드립니다.</li>
-          </ul>
-        </div>
-      </div>
 
       <div class="dec-card" id="dec-B">
         <div class="dec-head">
@@ -535,18 +531,13 @@
 
   <div id="t1-detail">
     <div class="dp-header c-travel">
-      <span class="dp-icon">🚗</span><span class="dp-time">06:30 – 07:00</span>
+      <span class="dp-icon">🚗</span><span class="dp-time">07:00 – 07:30</span>
       <span class="dp-title">이동: 반포 → 김포공항</span>
     </div>
     <div class="dp-body">
       <table class="info-table">
         <tr><td>소요 시간</td><td>약 26분 (네이버지도 기준)</td></tr>
       </table>
-      <div class="notice">
-        <strong>⚠️ 공항 혼잡도 안내</strong>
-        김포공항 국제선은 <b>일요일 오전 8시 전후가 가장 혼잡</b>합니다.<br>
-        보안검색 및 출국심사 지연 가능 → <b>출발 2시간 전 공항 도착 권장</b>
-      </div>
     </div>
   </div>
 
@@ -700,22 +691,34 @@
     </div>
     <div class="dp-body">
       <table class="info-table">
-        <tr><td>식당</td><td>미정 (TBD)</td></tr>
-        <tr><td>미팅 장소</td><td>3-chōme-3-9 Aobadai, Meguro City, Tokyo 153-0042</td></tr>
-        <tr><td>소요 시간</td><td>약 10 – 20분 (구글맵 기준, 18:00 출발)</td></tr>
+        <tr><td>식당</td><td>NOT A HOTEL INC &nbsp;<a href="https://maps.app.goo.gl/tZiYPrHTY6qY1d9Y9" target="_blank">📍</a></td></tr>
+        <tr><td>소요 시간</td><td>약 10분 (구글맵 기준)</td></tr>
       </table>
     </div>
   </div>
 
   <div id="t10-detail">
     <div class="dp-header c-meeting">
-      <span class="dp-icon">🤝</span><span class="dp-time">18:30 – 02:00</span>
-      <span class="dp-title">저녁 식사 &amp; 미팅</span>
+      <span class="dp-icon">🤝</span><span class="dp-time">18:30 – 20:00</span>
+      <span class="dp-title">저녁 식사</span>
     </div>
     <div class="dp-body">
       <table class="info-table">
-        <tr><td>장소</td><td>Aobadai, Meguro City, Tokyo</td></tr>
+        <tr><td>장소</td><td>NOT A HOTEL INC</td></tr>
         <tr><td>세부 내용</td><td>미정 (TBD)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="t14-detail">
+    <div class="dp-header c-travel">
+      <span class="dp-icon">🚗</span><span class="dp-time">20:00 – 20:30</span>
+      <span class="dp-title">이동: 미팅장소</span>
+    </div>
+    <div class="dp-body">
+      <table class="info-table">
+        <tr><td>미팅 장소</td><td>3-chōme-3-9 Aobadai, Meguro City, Tokyo 153-0042</td></tr>
+        <tr><td>소요 시간</td><td>약 25분 (구글맵 기준)</td></tr>
       </table>
     </div>
   </div>
@@ -774,7 +777,7 @@
 <script>
   // ── Build detail cards ──
   const dayDef = [
-    { label: 'DAY 1 · 일요일', ids: ['t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t11'] },
+    { label: 'DAY 1 · 일요일', ids: ['t1','t2','t3','t4','t5','t6','t7','t8','t9','t10','t14','t11'] },
     { label: 'DAY 2 · 월요일', ids: ['t12','t13'] }
   ];
   const detailMain = document.getElementById('detail-main');
