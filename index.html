@@ -316,7 +316,6 @@
   <div class="tabs-inner">
     <button class="tab-btn active" data-tab="schedule">📋&nbsp;전체 일정</button>
     <button class="tab-btn" data-tab="detail">🔍&nbsp;상세 일정</button>
-    <button class="tab-btn" data-tab="decisions">✅&nbsp;의사결정 <span class="tab-badge">2</span></button>
   </div>
 </div>
 
@@ -374,7 +373,6 @@
         <div class="tl-body">
           <div class="tl-title">🥃 선물 구매 (리쿼샵)</div>
           <div class="tl-sub">12:30 – 13:30 · 긴자</div>
-          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('B')">의사결정 B</span>
         </div>
         <div class="tl-arrow">›</div>
       </div>
@@ -385,7 +383,6 @@
         <div class="tl-body">
           <div class="tl-title">🍜 점심 식사</div>
           <div class="tl-sub">13:30 – 14:30</div>
-          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('B')">의사결정 B</span>
         </div>
         <div class="tl-arrow">›</div>
       </div>
@@ -406,7 +403,6 @@
         <div class="tl-body">
           <div class="tl-title">⏳ 자유 시간 (TBD)</div>
           <div class="tl-sub">15:00 – 18:00</div>
-          <span class="dec-ref" onclick="event.stopPropagation(); goToDecision('C')">의사결정 C</span>
         </div>
         <div class="tl-arrow">›</div>
       </div>
@@ -490,41 +486,6 @@
   </div>
 </div><!-- /tab-detail -->
 
-<!-- ════════════════ TAB: 의사결정사항 ════════════════ -->
-<div id="tab-decisions" class="tab-content">
-  <div class="decisions-wrap">
-    <div class="dec-heading">의사결정사항 (2건)</div>
-    <div class="dec-cards">
-
-      <div class="dec-card" id="dec-B">
-        <div class="dec-head">
-          <div class="dec-letter">B</div>
-          <div class="dec-title">공항 도착 후 긴자 방문 — 선물 구매 및 점심 식사</div>
-        </div>
-        <div class="dec-body">
-          <ul class="dec-list">
-            <li>하네다 공항 도착 후 긴자 인근에 위스키 전문 판매점이 다수 있습니다. (리쿼 마운틴, 시나노야, Jule's Whisky Collection 등)</li>
-            <li>호텔 체크인이 <strong>15:00</strong>임을 감안, 공항에서 바로 호텔로 이동하는 것보다 <strong>긴자에서 선물 구매 및 점심 식사를 하는 것</strong>이 시간 활용 면에서 효율적일 것으로 사료됩니다.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="dec-card" id="dec-C">
-        <div class="dec-head">
-          <div class="dec-letter">C</div>
-          <div class="dec-title">호텔 체크인 이후 일정 확인 필요</div>
-        </div>
-        <div class="dec-body">
-          <ul class="dec-list">
-            <li>저녁 식사 이전 <strong>(15:00 – 18:00)</strong>까지 별도로 계획하고 계신 일정이 있으신지 확인이 필요합니다.</li>
-            <li>저녁 식사 장소 및 미팅 관련 세부 일정은 확정된 사항이 있으신지 확인이 필요합니다.</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div><!-- /tab-decisions -->
 
 <!-- ════════════════ Detail Templates (hidden) ════════════════ -->
 <div id="detail-templates" style="display:none">
